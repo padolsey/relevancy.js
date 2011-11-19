@@ -1,0 +1,26 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/local/bin/npm', 'publish', '.' ]
+info using npm@1.0.105
+info using node@v0.4.4
+verbose config file /home/james/.npmrc
+verbose config file /usr/local/etc/npmrc
+verbose config file /usr/local/lib/node_modules/npm/npmrc
+verbose publish [ '.' ]
+verbose cache add [ '.', null ]
+silly cache add: name, spec, args [ undefined, '.', [ '.', null ] ]
+verbose parsed url { pathname: '.', href: '.' }
+ERR! Could not install: .
+ERR! Error: ENOENT, No such file or directory 'package.json'
+ERR! Report this *entire* log at:
+ERR!     <http://github.com/isaacs/npm/issues>
+ERR! or email it to:
+ERR!     <npm-@googlegroups.com>
+ERR! 
+ERR! System Linux 2.6.32-35-generic-pae
+ERR! command "node" "/usr/local/bin/npm" "publish" "."
+ERR! cwd /home/james/p/similarity/lib
+ERR! node -v v0.4.4
+ERR! npm -v 1.0.105
+ERR! path package.json
+ERR! code ENOENT
+verbose exit [ 1, true ]
