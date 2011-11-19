@@ -199,7 +199,7 @@
 			string: str,
 			match: prev,
 			length: prev.length,
-			index: index - prev.length,
+			index: index - prev.length
 		};
 
 	};

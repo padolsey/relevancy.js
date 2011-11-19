@@ -165,3 +165,32 @@ test('max', function(){
 	);
 
 });
+
+module('Misc. configs', {
+	setup: function() {
+		ok(true);
+	}
+});
+
+test('Custom bound - camelCase', function(){
+
+	var array = [
+		'Script',
+		'blahscript',
+		'JavaScript',
+		'Foo Script'
+	];
+
+	deepEqual(
+		similarity.Sorter({
+			bounds: ['\\s', '(?=[A-Z])']
+		}).sort(array, 'script'),
+		[
+			'Script',
+			'JavaScript',
+			'Foo Script',
+			'blahscript'
+		]
+	)
+
+});
