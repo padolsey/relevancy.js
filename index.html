@@ -1,1 +1,45 @@
-<script src="similarity.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Similarity Sorter Test suite</title>
+</head>
+<body>
+
+	<input id="search" />
+	<select id="dataset">
+		<option>countries</option>
+	</select>
+
+	<div id="data">
+
+	</div>
+
+	<script src="test/data.js"></script>
+	<script src="similarity.js"></script>
+
+	<script>
+
+		var dataSelect = document.getElementById('dataset'),
+			search = document.getElementById('search'),
+			data = document.getElementById('data'),
+
+			sorter = similarity.Sorter({}, countries);
+
+		search.onkeyup = function() {
+
+			var search = this.value.replace(/^\s+|\s+$/,'');
+
+			if (search) {
+				data.innerHTML = sorter.sortBy(search).slice(0, 10).join('<br/>') + '<br/>...';
+			} else {
+				data.innerHTML = '';
+			}
+
+			
+		};
+
+	</script>
+
+</body>
+</html>

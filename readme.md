@@ -41,6 +41,41 @@ The default bound of `\s+` is used to find where the calculations should be anch
 
 	countrySorter.sortBy('Al').slice(0, 5); // => [["DZ", "Algeria"], ["AL", "Albania"], ...]
 
+## Configuration
+
+If you want more control you should create a `similarity.Sorter` instance which can accept a configuration object upon instantiation:
+
+	var mySorter = new similarity.Sorter({
+
+		bounds: ['\\s', '(?=[A-Z])', '-'], // create new bounds (default: ['\\s'])
+
+		comparator: function(a, b) {
+			// When similarity.Sorter finds two items with equal weight
+			// it will pass them to this function so you can decide 
+			// what to do. I.e. return -1, 1
+			// Only return 0 if you're prepared for the pain caused 
+			// by unstable sorting algorithms in e.g. V8
+		},
+
+		weights: {
+			// Define your own weights (each of these is described further up)
+			// ** These are the default values:
+			// (yes, one of them is zero)
+			matchInSubjectLength: 1,
+			matchInSubjectIndex: .5,
+			matchInValueLength: 0,
+			matchInValueIndex: 1
+		}
+
+	});
+
+	// Usage:
+	mySorter.setArray( arrayToSearch );
+	mySorter.sortBy('thingToFind');
+
+	// Or:
+	mySorter.sort(arrayToSearch, 'thingToFind');
+
 ## Todo
 
  * Tidy up

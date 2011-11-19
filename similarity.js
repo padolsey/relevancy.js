@@ -13,7 +13,7 @@
 	};
 
 	S.weight = function similarityWeight(a, b) {
-		return S.defaultSorter._calcWeight(S._getLargestMatch(b, S.defaultSorter._generateSubjectRegex(a)), a);
+		return S.defaultSorter._calcWeight(b, S.defaultSorter._generateSubjectRegex(a), a);
 	};
 
 	S.Sorter = function(config, array) {
@@ -36,9 +36,13 @@
 
 		this._weights = {
 			matchInSubjectLength: 1,
-			matchInSubjectIndex: 1,
+			matchInSubjectIndex: .5,
 			matchInValueLength: 0,
 			matchInValueIndex: 1
+		};
+
+		this._secondaryComparator = config.comparator || function(a, b) {
+			return a > b ? 1 : -1;
 		};
 
 		if (config.weights) for (var i in this._weights) {
@@ -51,12 +55,12 @@
 
 	}
 
-	S.Sorter.subArrayWeightOperations = {
+	var subArrayWeightOperations = S.Sorter.subArrayWeightOperations = {
 		max: function(subArray, subjectRegex, subject, isRegexSearch) {
 			for (var max, l = subArray.length; l--;) {
 				max = Math.max(
 					max || 0,
-					this._calcWeight(S._getLargestMatch(subArray[l], subjectRegex), subject, isRegexSearch)
+					this._calcWeight(subArray[l], subjectRegex, subject, isRegexSearch)
 				);
 			}
 			return max;
@@ -65,20 +69,23 @@
 			for (var min, l = subArray.length; l--;) {
 				min = Math.min(
 					min || 1,
-					this._calcWeight(S._getLargestMatch(subArray[l], subjectRegex), subject, isRegexSearch)
+					this._calcWeight(subArray[l], subjectRegex, subject, isRegexSearch)
 				);
 			}
 			return min;
 		},
 		avg: function(subArray, subjectRegex, subject, isRegexSearch) {
 			for (var total = 0, l = subArray.length; l--;) {
-				total += this._calcWeight(S._getLargestMatch(subArray[l], subjectRegex), subject, isRegexSearch);
+				total += this._calcWeight(subArray[l], subjectRegex, subject, isRegexSearch);
 			}
 			return total / subArray.length;
 		}
 	};
 
-	Sorter.prototype = {
+	Sorter.prototype = S.Sorter.prototype = {
+
+		EXACT_MATCH: new Number,
+
 		_generateSubjectRegex: function(subject) {
 
 			var length = subject.length,
@@ -109,7 +116,9 @@
 		},
 		sortBy: function(subject) {
 
-			var array = this._array,
+			if (!subject) return this._array;
+
+			var array = this._array.slice(0),
 				me = this,
 				isRegexSearch = S._isRegExp(subject),
 				regex = isRegexSearch ?
@@ -118,37 +127,45 @@
 
 			return array.sort(function(a, b){
 
-				var l, max, aWeight, bWeight;
+				var aIsArray = S._isArray(a),
+					bIsArray = S._isArray(b),
+					l, max, aWeight, bWeight;
 
-				if (S._isArray(a)) {
+				if (aIsArray) {
 					aWeight = me._subArrayWeightOperation(a, regex, subject, isRegexSearch);
 				} else {
 					a = String(a);
-					aWeight = me._calcWeight(S._getLargestMatch(a, regex), subject, isRegexSearch);
+					aWeight = me._calcWeight(a, regex, subject, isRegexSearch);
 				}
 
-				if (S._isArray(b)) {
+				if (bIsArray) {
 					bWeight = me._subArrayWeightOperation(b, regex, subject, isRegexSearch);
 				} else {
 					b = String(b);
-					bWeight = me._calcWeight(S._getLargestMatch(b, regex), subject, isRegexSearch);
+					bWeight = me._calcWeight(b, regex, subject, isRegexSearch);
 				}
 
 				return aWeight == null && bWeight == null ? 0 :
 					aWeight == null ? 1 : 
 						bWeight == null ? -1 :
-							bWeight > aWeight ? 1 : -1;
+							aWeight === bWeight ? 
+								me._secondaryComparator(a, b) :
+								bWeight > aWeight ? 1 : -1;
 				
 			});
 
 
 		},
-		_calcWeight: function(match, subject, isRegexSearch) {
+		_calcWeight: function(value, regex, subject, isRegexSearch) {
+
+			if (value === subject) return 1;
+			if (value.toLowerCase() === subject.toLowerCase()) return .9;
+
+			var match = S._getLargestMatch(value, regex);
 
 			if (!match) return null;
 
-			var value = match.string,
-				upTillAndInclMatch = value.slice(0, match.index + match.length),
+			var upTillAndInclMatch = value.slice(0, match.index + match.length),
 				lastBoundIndex = (upTillAndInclMatch.match(this.lastBoundRegex)||[''])[0].length,
 
 				matchInValueIndexScore = (1 - (
@@ -173,7 +190,7 @@
 			score += matchInSubjectIndexScore * this._weights.matchInSubjectIndex;
 			score += matchInSubjectLengthScore * this._weights.matchInSubjectLength;
 
-			score /= 4;
+			score /= 5;
 
 			return score;
 

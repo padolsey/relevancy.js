@@ -81,9 +81,9 @@ test('Basic names - ^Ja', function(){
 		[
 			'James',
 			'Jan',
+			'Joe',
 			'John',
-			'Julie',
-			'Joe'
+			'Julie'
 		]
 	);
 
@@ -172,6 +172,58 @@ module('Misc. configs', {
 	}
 });
 
+test('Basic names - Custom secondary comparator (retain index)', function(){
+
+	// It's possible to specify the secondary comparator used when
+	// weights are found to be equal. similarity.js will attempt
+	// to retain original positions, but some engines (V8!) don't
+	// have stable sorts... and so this kind of thing can become a necessity.
+
+	var unsorted = [
+			'John',
+			'Adam',
+			'Julie',
+			'Michael',
+			'Paul',
+			'Sarah',
+			'Joe',
+			'Robert',
+			'James',
+			'Oliver',
+			'Susan',
+			'Ben',
+			'Alice',
+			'Jan',
+			'George'
+		],
+		indexes = {};
+
+	for (var i = 0, l = unsorted.length; i < l; ++i) {
+		indexes[unsorted[i]] = i;
+	}
+
+	var sorted = similarity.Sorter({
+			comparator: function(a, b) {
+				return indexes[a] > indexes[b] ? 1 : -1;
+			}
+		}).sort(unsorted.slice(), 'Ja');
+
+	deepEqual(
+		sorted.slice(0, 5),
+		[
+			'James',
+			'Jan',
+
+			// These three are equal so, thanks to our `indexes`
+			// they should be positioned as in `unsorted`
+			'John',
+			'Julie',
+			'Joe'
+		]
+	);
+
+});
+
 test('Custom bound - camelCase', function(){
 
 	var array = [
@@ -187,8 +239,8 @@ test('Custom bound - camelCase', function(){
 		}).sort(array, 'script'),
 		[
 			'Script',
-			'JavaScript',
 			'Foo Script',
+			'JavaScript',
 			'blahscript'
 		]
 	)
