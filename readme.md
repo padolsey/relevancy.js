@@ -1,6 +1,12 @@
 ## Similarity Sorter/Weighter
 
+**[Version: 0.1.0dev]**
+
 similarity.js contains a basic sorting/weighting algorithm that can be used to weight a short string relative to another short string. It can gage the similarity between two strings, but only in a unidirectional manner (`"Lon"` is more *similar* to `"London"` than `"London"` is to `"Lon"`). This was intentional as its main use-case is autocompletion -- i.e. matching partial typed words against large data lists.
+
+	// Basic weighting
+	similarity.weight('Ame', 'America') > similarity.weight('Ame', 'Armenia');
+	// i.e. "Ame" has a higher similarity weighting to "America" than to "Armenia"
 
 The *subject* of a single weighting or sorting operation is the string that is being compared against the target string or array. For example:
 
@@ -39,7 +45,7 @@ The default bound of `\s+` is used to find where the calculations should be anch
 
 	var countrySorter = similarity.Sorter(null, countries);
 
-	countrySorter.sortBy('Al').slice(0, 5); // => [["DZ", "Algeria"], ["AL", "Albania"], ...]
+	countrySorter.sortBy('Al').slice(0, 5); // => [["AL", "Albania"], ["DZ", "Algeria"]...]
 
 ## Configuration
 
