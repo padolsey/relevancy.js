@@ -1,6 +1,6 @@
-## Similarity Sorter/Weighter
+# Similarity Sorter/Weighter
 
-### Objective
+## Objective
 
 The original purpose behind similarity.js was to sort an array of items based on each element's similarity to a single string. This is exactly what autocompletion widgets/scripts claim to do, but many of them suck for the following reasons:
 
@@ -17,15 +17,16 @@ The basic partial-matching implemented by most autocompletion scripts can hamper
 
 Hopefully, similarity.js can rectify this with its not-so-complex weighting algorithm.
 
-### Intro
+## Intro
 
 **[Version: 0.1.0dev]**
 
 similarity.js contains a basic sorting/weighting algorithm that can be used to weight a short string relative to another short string. It can gage the similarity between two strings, but only in a unidirectional manner (`"Lon"` is more *similar* to `"London"` than `"London"` is to `"Lon"`). This was intentional as its main use-case is autocompletion -- i.e. matching partial typed words against large data lists.
 
-	// Basic weighting
-	similarity.weight('Ame', 'America') > similarity.weight('Ame', 'Armenia');
-	// i.e. "Ame" has a higher similarity weighting to "America" than to "Armenia"
+	similarity.weight('Ame', 'America') > similarity.weight('Ame', 'Armenia'); // => true
+
+	// Explanation:
+	// "Ame" has a higher similarity weighting to "America" than to "Armenia"
 
 The *subject* of a single weighting or sorting operation is the string that is being compared against the target string or array. For example:
 
@@ -45,7 +46,7 @@ Note that the algorithm will account for spaces and anchor the calculations abov
 
 The default bound of `\s+` is used to find where the calculations should be anchored. You can add your own bounds via the configuration option: `bounds`.
 
-### Example Implementation
+## Example Implementation
 
 	// In this example, we'll also see how similarity.js can
 	// deal with nested arrays. Default operation is `max`,
