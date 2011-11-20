@@ -1,5 +1,24 @@
 ## Similarity Sorter/Weighter
 
+### Objective
+
+The original purpose behind similarity.js was to sort an array of items based on each element's similarity to a single string. This is exactly what autocompletion widgets/scripts claim to do, but many of them suck for the following reasons:
+
+ * They only take into account partial matches at the beginning of the strings. If I type "nited kingdom" (missing a "u") nothing will show up.
+ * They don't actually sort the results dependent on similarity -- they just show you where the partial matches have been found, in alphabetical order usually. Match length/position is rarely considered.
+
+E.g.
+
+ * Go [here](http://jqueryui.com/demos/autocomplete/) and type in the letter "C" ... Does the order of the suggestions make any sense? Shouldn't it be ordered like: C, C++, Clojure, ... ?
+ * Go [here](http://www.vonloesch.de/node/18) and type "oris" (Missing "B"). No results.
+ * Go [here](http://dhtmlx.com/docs/products/dhtmlxCombo/index.shtml) and type "Kingdom" in the top-right field. The result "united kingdom" does not show...
+
+The basic partial-matching implemented by most autocompletion scripts can hamper usability.
+
+Hopefully, similarity.js can rectify this with its not-so-complex weighting algorithm.
+
+### Intro
+
 **[Version: 0.1.0dev]**
 
 similarity.js contains a basic sorting/weighting algorithm that can be used to weight a short string relative to another short string. It can gage the similarity between two strings, but only in a unidirectional manner (`"Lon"` is more *similar* to `"London"` than `"London"` is to `"Lon"`). This was intentional as its main use-case is autocompletion -- i.e. matching partial typed words against large data lists.
