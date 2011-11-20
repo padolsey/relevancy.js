@@ -7,7 +7,7 @@ module('101', {
 test('Basic first-character ordering', function(){
 
 	var unsorted = ['Paul', 'Michael'],
-		sorted = similarity.sort(unsorted.slice(), 'M');
+		sorted = relevancy.sort(unsorted.slice(), 'M');
 
 	deepEqual(sorted, ['Michael', 'Paul']);
 
@@ -16,7 +16,7 @@ test('Basic first-character ordering', function(){
 test('No matching items', function() {
 
 	var unsorted = ['aaa', 'bbb', 'ccc'],
-		sorted = similarity.sort(unsorted.slice(), 'x');
+		sorted = relevancy.sort(unsorted.slice(), 'x');
 
 	deepEqual(sorted, unsorted);
 
@@ -25,7 +25,7 @@ test('No matching items', function() {
 test('Some matching items', function(){
 
 	var unsorted = ['Sarah', 'Julie', 'Michael', 'Paul', 'Amanada'],
-		sorted = similarity.sort(unsorted.slice(), 'M');
+		sorted = relevancy.sort(unsorted.slice(), 'M');
 
 	deepEqual(sorted, ['Michael', 'Amanada', 'Sarah', 'Julie', 'Paul']);
 
@@ -34,7 +34,7 @@ test('Some matching items', function(){
 test('Items containing matches', function(){
 
 	var unsorted = ['AAAA', 'ABBA', 'CCCC', 'CBBC'],
-		sorted = similarity.sort(unsorted.slice(), 'BB');
+		sorted = relevancy.sort(unsorted.slice(), 'BB');
 
 	deepEqual(sorted, ['ABBA', 'CBBC', 'AAAA', 'CCCC']);
 
@@ -43,7 +43,7 @@ test('Items containing matches', function(){
 test('Distance-from-start', function(){
 
 	var unsorted = ['..a', '.a', '....a', 'a', '...a'],
-		sorted = similarity.sort(unsorted.slice(), 'a');
+		sorted = relevancy.sort(unsorted.slice(), 'a');
 
 	deepEqual(sorted, ['a', '.a', '..a', '...a', '....a']);
 
@@ -74,7 +74,7 @@ test('Basic names - ^Ja', function(){
 			'Jan',
 			'George'
 		],
-		sorted = similarity.sort(unsorted.slice(), 'Ja');
+		sorted = relevancy.sort(unsorted.slice(), 'Ja');
 
 	deepEqual(
 		sorted.slice(0, 5),
@@ -101,7 +101,7 @@ test('Full names', function(){
 			'Bob',
 			'Sarah Smith'
 		],
-		sorted = similarity.sort(unsorted.slice(), 'Sm');
+		sorted = relevancy.sort(unsorted.slice(), 'Sm');
 
 	deepEqual(
 		sorted.slice(0, 5),
@@ -118,16 +118,16 @@ test('Full names', function(){
 
 test('Countries - single full', function(){
 
-	deepEqual(similarity.sort(countries, 'GB')[0], ['GB', 'United Kingdom']);
-	deepEqual(similarity.sort(countries, 'United States')[0], ['US', 'United States']);
-	deepEqual(similarity.sort(countries, 'Saint Lucia')[0], ['LC', 'Saint Lucia']);
-	deepEqual(similarity.sort(countries, 'CU')[0], ['CU', 'Cuba']);
+	deepEqual(relevancy.sort(countries, 'GB')[0], ['GB', 'United Kingdom']);
+	deepEqual(relevancy.sort(countries, 'United States')[0], ['US', 'United States']);
+	deepEqual(relevancy.sort(countries, 'Saint Lucia')[0], ['LC', 'Saint Lucia']);
+	deepEqual(relevancy.sort(countries, 'CU')[0], ['CU', 'Cuba']);
 
 });
 
 test('Countries - single partial', function(){
 	
-	var sorted = similarity.sort(countries, 'Ukr');
+	var sorted = relevancy.sort(countries, 'Ukr');
 
 	deepEqual(sorted[0], ['UA', 'Ukraine']);
 
@@ -135,7 +135,7 @@ test('Countries - single partial', function(){
 
 test('Countries - single partial - second word', function(){
 	
-	var sorted = similarity.sort(countries, 'Poly');
+	var sorted = relevancy.sort(countries, 'Poly');
 
 	deepEqual(sorted[0], ['PF', 'French Polynesia']);
 
@@ -149,7 +149,7 @@ module('subArrayWeightOperations (max, min, avg, custom', {
 
 test('max', function(){
 	
-	var sorted = similarity.sort([
+	var sorted = relevancy.sort([
 		['b', 'c', 'a'],
 		['cccc', 'bbbb', 'cccc'],
 		['bb', 'aa', 'cc']
@@ -175,7 +175,7 @@ module('Misc. configs', {
 test('Basic names - Custom secondary comparator (retain index)', function(){
 
 	// It's possible to specify the secondary comparator used when
-	// weights are found to be equal. similarity.js will attempt
+	// weights are found to be equal. relevancy.js will attempt
 	// to retain original positions, but some engines (V8!) don't
 	// have stable sorts... and so this kind of thing can become a necessity.
 
@@ -202,7 +202,7 @@ test('Basic names - Custom secondary comparator (retain index)', function(){
 		indexes[unsorted[i]] = i;
 	}
 
-	var sorted = similarity.Sorter({
+	var sorted = relevancy.Sorter({
 			comparator: function(a, b) {
 				return indexes[a] > indexes[b] ? 1 : -1;
 			}
@@ -234,7 +234,7 @@ test('Custom bound - camelCase', function(){
 	];
 
 	deepEqual(
-		similarity.Sorter({
+		relevancy.Sorter({
 			bounds: ['\\s', '(?=[A-Z])']
 		}).sort(array, 'script'),
 		[

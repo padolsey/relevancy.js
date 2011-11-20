@@ -1,16 +1,16 @@
 {
-  "name": "similarity",
-  "description": "Unidirectional string similarity",
+  "name": "relevancy",
+  "description": "Unidirectional string relevancy",
   "version": "0.1.0",
   "author": "James Padolsey https://github.com/jamespadolsey",
   "bugs" : {
-    "url" : "http://github.com/jamespadolsey/similarity.js/issues"
+    "url" : "http://github.com/jamespadolsey/relevancy.js/issues"
   },
   "repository": {
     "type": "git",
-    "url": "http://jamespadolsey@github.com/jamespadolsey/similarity.js.git"
+    "url": "http://jamespadolsey@github.com/jamespadolsey/relevancy.js.git"
   },
-  "main": "lib/similarity",
+  "main": "lib/relevancy",
   "licenses": [],
   "contributors": [
     "James Padolsey <> (http://github.com/jamespadolsey)"

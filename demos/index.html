@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<title>Similarity Sorter Test suite</title>
+	<title>relevancy Sorter Test suite</title>
 </head>
 <body>
 
@@ -16,7 +16,7 @@
 	</div>
 
 	<script src="../test/data.js"></script>
-	<script src="../lib/similarity.js"></script>
+	<script src="../lib/relevancy.js"></script>
 
 	<script>
 
@@ -24,7 +24,7 @@
 			search = document.getElementById('search'),
 			data = document.getElementById('data'),
 
-			sorter = similarity.Sorter({}, countries);
+			sorter = relevancy.Sorter({}, countries);
 
 		search.onkeyup = function() {
 
