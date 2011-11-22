@@ -1,8 +1,22 @@
-module('101', {
-	setup: function() {
-		ok(true);
+module('Programmatic');
+
+test('Substrings - testing index[0]', function(){
+	
+	var unsorted = [],
+		strings = 'foo ggg hhh aaa jjj bar ... mim mam ham jam kam'.split(' ');
+
+	expect(strings.length);
+
+	for (var i = 0, l = strings.length; i < l; ++i) {
+		equal(
+			relevancy.sort(strings, strings[i])[0],
+			strings[i]
+		);
 	}
+
 });
+
+module('101');
 
 test('Basic first-character ordering', function(){
 
@@ -49,11 +63,7 @@ test('Distance-from-start', function(){
 
 });
 
-module('Real world examples', {
-	setup: function() {
-		ok(true);
-	}
-});
+module('Real world examples');
 
 test('Basic names - ^Ja', function(){
 
@@ -141,13 +151,48 @@ test('Countries - single partial - second word', function(){
 
 });
 
-module('subArrayWeightOperations (max, min, avg, custom', {
-	setup: function() {
-		ok(true);
-	}
-});
+test('Full sentences', function(){
+	
+	var unsorted = [
+		'There are only 76 bottles of wine left',
+		'There are 23 bottles left',
+		'76 bottles of wine left, and no more...'
+	];
 
-test('max', function(){
+	deepEqual(
+		relevancy.sort(unsorted, 'There are only'),
+		[
+			unsorted[0],
+			unsorted[1],
+			unsorted[2]
+		]
+	);
+
+	deepEqual(
+		relevancy.sort(unsorted, '76 bottles of'),
+		[
+			unsorted[2],
+			unsorted[0],
+			unsorted[1]
+		]
+	);
+
+	deepEqual(
+		relevancy.sort(unsorted, 'bottles left'),
+		[
+			unsorted[1],
+			unsorted[2],
+			unsorted[0]
+		]
+	);
+
+})
+
+module('subArrayWeightOperations (max, min, avg, custom');
+
+test('max [default]', function(){
+
+	// `max` is default
 	
 	var sorted = relevancy.sort([
 		['b', 'c', 'a'],
@@ -166,11 +211,32 @@ test('max', function(){
 
 });
 
-module('Misc. configs', {
-	setup: function() {
-		ok(true);
-	}
+test('custom', function(){
+	
+	var unsorted = [
+			['a', 'aa', 'aa'],
+			['aa', 'bb', 'bb'], // First item of this sub-array has most relevancy
+			['b', 'aa', 'aa...']
+		],
+		sorted = relevancy.Sorter({
+			subArrayWeightOperation: function(subArray, subjectRegex, subject, isRegexSearch) {
+				// First item only
+				return this._calcWeight(subArray[0], subjectRegex, subject, isRegexSearch);
+			}
+		}).sort(unsorted, 'aa');
+
+	deepEqual(
+		sorted,
+		[
+			unsorted[1],
+			unsorted[0],
+			unsorted[2]
+		]
+	);
+
 });
+
+module('Misc. configs');
 
 test('Basic names - Custom secondary comparator (retain index)', function(){
 
