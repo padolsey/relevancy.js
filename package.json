@@ -2,17 +2,17 @@
   "name": "relevancy",
   "description": "Unidirectional string relevancy",
   "version": "0.1.0",
-  "author": "James Padolsey https://github.com/jamespadolsey",
+  "author": "James Padolsey https://github.com/padolsey",
   "bugs" : {
-    "url" : "http://github.com/jamespadolsey/relevancy.js/issues"
+    "url" : "http://github.com/padolsey/relevancy.js/issues"
   },
   "repository": {
     "type": "git",
-    "url": "http://jamespadolsey@github.com/jamespadolsey/relevancy.js.git"
+    "url": "http://jamespadolsey@github.com/padolsey/relevancy.js.git"
   },
   "main": "lib/relevancy",
   "licenses": [],
   "contributors": [
-    "James Padolsey <> (http://github.com/jamespadolsey)"
+    "James Padolsey <> (http://github.com/padolsey)"
   ]
 }
