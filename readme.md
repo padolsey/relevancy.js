@@ -1,5 +1,7 @@
 # relevancy Sorter/Weighter
 
+*Using node.js? Install: `npm install relevancy`.*
+
 ## Objective
 
 The original purpose behind relevancy.js was to sort an array of items based on each element's relevancy to a single string. This is exactly what autocompletion widgets/scripts claim to do, but many of them suck for the following reasons:
