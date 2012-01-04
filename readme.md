@@ -21,19 +21,23 @@ Hopefully, relevancy.js can rectify this with its not-so-complex weighting algor
 
 **[Version: 0.1.0dev]**
 
-relevancy.js contains a basic sorting/weighting algorithm that can be used to weight a short string relative to another short string. It can gage the relevancy between two strings, but only in a unidirectional manner (`"Lon"` is more *similar* to `"London"` than `"London"` is to `"Lon"`). This was intentional as its main use-case is autocompletion -- i.e. matching partial typed words against large data lists.
+relevancy.js contains a basic sorting/weighting algorithm that can be used to weight a short string relative to another short string. It can gage the relevancy between two strings, but only in a unidirectional manner (`"Lon"` is more *relevant* to `"London"` than `"London"` is to `"Lon"`). This was intentional as its main use-case is autocompletion -- i.e. matching partial typed words against large data lists.
 
-	relevancy.weight('Ame', 'America') > relevancy.weight('Ame', 'Armenia'); // => true
+```javascript
+relevancy.weight('Ame', 'America') > relevancy.weight('Ame', 'Armenia'); // => true
 
-	// Explanation:
-	// "Ame" has a higher relevancy weighting to "America" than to "Armenia"
+// Explanation:
+// "Ame" has a higher relevancy weighting to "America" than to "Armenia"
+```
 
 The *subject* of a single weighting or sorting operation is the string that is being compared against the target string or array. For example:
 
-    var subject = 'G';
-    var array = ['Apple', 'Banana', 'Grape', 'Mango'];
+```javascript
+var subject = 'G';
+var array = ['Apple', 'Banana', 'Grape', 'Mango'];
 
-    relevancy.sort(array, subject); // => ['Grape', 'Mango', 'Apple', 'Banana']
+relevancy.sort(array, subject); // => ['Grape', 'Mango', 'Apple', 'Banana']
+```
 
 The elements have been sorted by their relevancy to the subject "G", taking the following weights into account:
 
@@ -48,59 +52,63 @@ The default bound of `\s+` is used to find where the calculations should be anch
 
 ## Example Implementation
 
-	// In this example, we'll also see how relevancy.js can
-	// deal with nested arrays. Default operation is `max`,
-	// meaning that it'll get the maximum weight from each sub-array
-	// and use that for comparing to other sub-arrays.
+```javascript
+// In this example, we'll also see how relevancy.js can
+// deal with nested arrays. Default operation is `max`,
+// meaning that it'll get the maximum weight from each sub-array
+// and use that for comparing to other sub-arrays.
 
-	var countries = [
-		['AF', 'Afghanistan'],
-		['AL', 'Albania'],
-		['DZ', 'Algeria'],
-		['AS', 'American Samoa'],
-		['AD', 'Andorra'],
-		['AO', 'Angola'],
-		// .......
-	];
+var countries = [
+	['AF', 'Afghanistan'],
+	['AL', 'Albania'],
+	['DZ', 'Algeria'],
+	['AS', 'American Samoa'],
+	['AD', 'Andorra'],
+	['AO', 'Angola'],
+	// .......
+];
 
-	var countrySorter = relevancy.Sorter(null, countries);
+var countrySorter = relevancy.Sorter(null, countries);
 
-	countrySorter.sortBy('Al').slice(0, 5); // => [["AL", "Albania"], ["DZ", "Algeria"]...]
+countrySorter.sortBy('Al').slice(0, 5); // => [["AL", "Albania"], ["DZ", "Algeria"]...]
+```
 
 ## Configuration
 
 If you want more control you should create a `relevancy.Sorter` instance which can accept a configuration object upon instantiation:
 
-	var mySorter = new relevancy.Sorter({
+```javascript
+var mySorter = new relevancy.Sorter({
 
-		bounds: ['\\s', '(?=[A-Z])', '-'], // create new bounds (default: ['\\s'])
+	bounds: ['\\s', '(?=[A-Z])', '-'], // create new bounds (default: ['\\s'])
 
-		comparator: function(a, b) {
-			// When relevancy.Sorter finds two items with equal weight
-			// it will pass them to this function so you can decide 
-			// what to do. I.e. return -1, 1
-			// Only return 0 if you're prepared for the pain caused 
-			// by unstable sorting algorithms in e.g. V8
-		},
+	comparator: function(a, b) {
+		// When relevancy.Sorter finds two items with equal weight
+		// it will pass them to this function so you can decide 
+		// what to do. I.e. return -1, 1
+		// Only return 0 if you're prepared for the pain caused 
+		// by unstable sorting algorithms in e.g. V8
+	},
 
-		weights: {
-			// Define your own weights (each of these is described further up)
-			// ** These are the default values:
-			// (yes, one of them is zero)
-			matchInSubjectLength: 1,
-			matchInSubjectIndex: .5,
-			matchInValueLength: 0,
-			matchInValueIndex: 1
-		}
+	weights: {
+		// Define your own weights (each of these is described further up)
+		// ** These are the default values:
+		// (yes, one of them is zero)
+		matchInSubjectLength: 1,
+		matchInSubjectIndex: .5,
+		matchInValueLength: 0,
+		matchInValueIndex: 1
+	}
 
-	});
+});
 
-	// Usage:
-	mySorter.setArray( arrayToSearch );
-	mySorter.sortBy('thingToFind');
+// Usage:
+mySorter.setArray( arrayToSearch );
+mySorter.sortBy('thingToFind');
 
-	// Or:
-	mySorter.sort(arrayToSearch, 'thingToFind');
+// Or:
+mySorter.sort(arrayToSearch, 'thingToFind');
+```
 
 ## Todo
 
