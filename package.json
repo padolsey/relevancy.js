@@ -1,7 +1,7 @@
 {
   "name": "relevancy",
   "description": "Unidirectional string relevancy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "James Padolsey https://github.com/padolsey",
   "bugs" : {
     "url" : "http://github.com/padolsey/relevancy.js/issues"

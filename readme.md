@@ -21,7 +21,7 @@ Hopefully, relevancy.js can rectify this with its not-so-complex weighting algor
 
 ## Intro
 
-**[Version: 0.1.0dev]**
+**[Version: 0.2.0]**
 
 relevancy.js contains a basic sorting/weighting algorithm that can be used to weight a short string relative to another short string. It can gage the relevancy between two strings, but only in a unidirectional manner (`"Lon"` is more *relevant* to `"London"` than `"London"` is to `"Lon"`). This was intentional as its main use-case is autocompletion -- i.e. matching partial typed words against large data lists.
 
@@ -111,6 +111,13 @@ mySorter.sortBy('thingToFind');
 // Or:
 mySorter.sort(arrayToSearch, 'thingToFind');
 ```
+
+## Changelog
+
+ * **0.2**
+ 	* `subArrayWeightOperation` option renamed to `subWeightOperation` (because it's used for regular sub-objects as well as arrays)
+ 	* Arguments passed to `subWeightOperation` are now simplified and only include the sub-item and a `calc` function which you call to determine the actual weight. The resulting weight should be returned from your custom `subWeightOperation` function.
+ 	* `subWeightOperation` option added to `sort` method. See [issue #1](https://github.com/padolsey/relevancy.js/issues/1).
 
 ## Todo
 

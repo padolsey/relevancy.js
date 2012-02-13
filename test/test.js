@@ -211,7 +211,7 @@ test('max [default]', function(){
 
 });
 
-test('custom', function(){
+test('custom - sub arrays', function(){
 	
 	var unsorted = [
 			['a', 'aa', 'aa'],
@@ -219,9 +219,9 @@ test('custom', function(){
 			['b', 'aa', 'aa...']
 		],
 		sorted = relevancy.Sorter({
-			subArrayWeightOperation: function(subArray, subjectRegex, subject, isRegexSearch) {
+			subWeightOperation: function(subArray, calc) {
 				// First item only
-				return this._calcWeight(subArray[0], subjectRegex, subject, isRegexSearch);
+				return calc(subArray[0]);
 			}
 		}).sort(unsorted, 'aa');
 
@@ -234,6 +234,49 @@ test('custom', function(){
 		]
 	);
 
+});
+
+test('custom - sub objects', function(){
+	var unsorted = [
+			{name: 'John'},
+			{name: 'Janet'},
+			{name: 'Linda'},
+			{name: 'Chris'},
+			{name: 'Amber'}
+		],
+		sorted = relevancy.Sorter({
+			subWeightOperation: function(sub, calc) {
+				return calc(sub.name);
+			}
+		}).sort(unsorted, 'an');
+
+	deepEqual(
+		sorted,
+		[
+			unsorted[1],
+			unsorted[4],
+			unsorted[2],
+			unsorted[0],
+			unsorted[3]
+		]
+	);
+
+	// Alternative sig:
+	sorted = relevancy.sort(unsorted, 'an', function(sub, calc) {
+		return calc(sub.name);
+	});
+
+	deepEqual(
+		sorted,
+		[
+			unsorted[1],
+			unsorted[4],
+			unsorted[2],
+			unsorted[0],
+			unsorted[3]
+		]
+	);
+	
 });
 
 module('Misc. configs');
