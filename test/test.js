@@ -1,105 +1,111 @@
-module('Programmatic');
+module('Programmatic', function() {
 
-test('Substrings - testing index[0]', function(){
-	
-	var unsorted = [],
-		strings = 'foo ggg hhh aaa jjj bar ... mim mam ham jam kam'.split(' ');
+	module('Substrings - testing index[0]', function(){
+		
+		var unsorted = [],
+			strings = 'foo ggg hhh aaa jjj bar ... mim mam ham jam kam'.split(' ');
 
-	expect(strings.length);
+		expect(strings.length);
 
-	for (var i = 0, l = strings.length; i < l; ++i) {
-		equal(
-			relevancy.sort(strings, strings[i])[0],
-			strings[i]
+		for (var i = 0, l = strings.length; i < l; ++i) {
+			expect(
+				relevancy.sort(strings, strings[i])[0]
+			).toBe(
+				strings[i]
+			);
+		}
+
+	});
+
+});
+
+module('101', function() {
+
+	module('Basic first-character ordering', function(){
+
+		var unsorted = ['Paul', 'Michael'],
+			sorted = relevancy.sort(unsorted.slice(), 'M');
+
+		expect(sorted).toEqual(['Michael', 'Paul']);
+
+	});
+
+	module('No matching items', function() {
+
+		var unsorted = ['aaa', 'bbb', 'ccc'],
+			sorted = relevancy.sort(unsorted.slice(), 'x');
+
+		expect(sorted).toEqual(unsorted);
+
+	});
+
+	module('Some matching items', function(){
+
+		var unsorted = ['Sarah', 'Julie', 'Michael', 'Paul', 'Amanada'],
+			sorted = relevancy.sort(unsorted.slice(), 'M');
+
+		expect(sorted).toEqual(['Michael', 'Amanada', 'Sarah', 'Julie', 'Paul']);
+
+	});
+
+	module('Items containing matches', function(){
+
+		var unsorted = ['AAAA', 'ABBA', 'CCCC', 'CBBC'],
+			sorted = relevancy.sort(unsorted.slice(), 'BB');
+
+		expect(sorted).toEqual(['ABBA', 'CBBC', 'AAAA', 'CCCC']);
+
+	});
+
+	module('Distance-from-start', function(){
+
+		var unsorted = ['..a', '.a', '....a', 'a', '...a'],
+			sorted = relevancy.sort(unsorted.slice(), 'a');
+
+		expect(sorted).toEqual(['a', '.a', '..a', '...a', '....a']);
+
+	});
+
+});
+
+module('Real world examples', function() {
+
+	module('Basic names - ^Ja', function(){
+
+		var unsorted = [
+				'John',
+				'Adam',
+				'Julie',
+				'Michael',
+				'Paul',
+				'Sarah',
+				'Joe',
+				'Robert',
+				'James',
+				'Oliver',
+				'Susan',
+				'Ben',
+				'Alice',
+				'Jan',
+				'George'
+			],
+			sorted = relevancy.sort(unsorted.slice(), 'Ja');
+
+		expect(sorted.slice(0, 5)).toEqual(
+			[
+				'James',
+				'Jan',
+				'Joe',
+				'John',
+				'Julie'
+			]
 		);
-	}
+
+	});
 
 });
 
-module('101');
-
-test('Basic first-character ordering', function(){
-
-	var unsorted = ['Paul', 'Michael'],
-		sorted = relevancy.sort(unsorted.slice(), 'M');
-
-	deepEqual(sorted, ['Michael', 'Paul']);
-
-});
-
-test('No matching items', function() {
-
-	var unsorted = ['aaa', 'bbb', 'ccc'],
-		sorted = relevancy.sort(unsorted.slice(), 'x');
-
-	deepEqual(sorted, unsorted);
-
-});
-
-test('Some matching items', function(){
-
-	var unsorted = ['Sarah', 'Julie', 'Michael', 'Paul', 'Amanada'],
-		sorted = relevancy.sort(unsorted.slice(), 'M');
-
-	deepEqual(sorted, ['Michael', 'Amanada', 'Sarah', 'Julie', 'Paul']);
-
-});
-
-test('Items containing matches', function(){
-
-	var unsorted = ['AAAA', 'ABBA', 'CCCC', 'CBBC'],
-		sorted = relevancy.sort(unsorted.slice(), 'BB');
-
-	deepEqual(sorted, ['ABBA', 'CBBC', 'AAAA', 'CCCC']);
-
-});
-
-test('Distance-from-start', function(){
-
-	var unsorted = ['..a', '.a', '....a', 'a', '...a'],
-		sorted = relevancy.sort(unsorted.slice(), 'a');
-
-	deepEqual(sorted, ['a', '.a', '..a', '...a', '....a']);
-
-});
-
-module('Real world examples');
-
-test('Basic names - ^Ja', function(){
-
-	var unsorted = [
-			'John',
-			'Adam',
-			'Julie',
-			'Michael',
-			'Paul',
-			'Sarah',
-			'Joe',
-			'Robert',
-			'James',
-			'Oliver',
-			'Susan',
-			'Ben',
-			'Alice',
-			'Jan',
-			'George'
-		],
-		sorted = relevancy.sort(unsorted.slice(), 'Ja');
-
-	deepEqual(
-		sorted.slice(0, 5),
-		[
-			'James',
-			'Jan',
-			'Joe',
-			'John',
-			'Julie'
-		]
-	);
-
-});
-
-test('Full names', function(){
+module('Full names', function(){
 
 	var unsorted = [
 			'John Smith',
@@ -113,8 +119,7 @@ test('Full names', function(){
 		],
 		sorted = relevancy.sort(unsorted.slice(), 'Sm');
 
-	deepEqual(
-		sorted.slice(0, 5),
+	expect(sorted.slice(0, 5)).toEqual(
 		[
 			'Smyth Jones',
 			'John Smith',
@@ -126,32 +131,32 @@ test('Full names', function(){
 
 });
 
-test('Countries - single full', function(){
+module('Countries - single full', function(){
 
-	deepEqual(relevancy.sort(countries, 'GB')[0], ['GB', 'United Kingdom']);
-	deepEqual(relevancy.sort(countries, 'United States')[0], ['US', 'United States']);
-	deepEqual(relevancy.sort(countries, 'Saint Lucia')[0], ['LC', 'Saint Lucia']);
-	deepEqual(relevancy.sort(countries, 'CU')[0], ['CU', 'Cuba']);
+	expect(relevancy.sort(countries, 'GB')[0]).toEqual(['GB', 'United Kingdom']);
+	expect(relevancy.sort(countries, 'United States')[0]).toEqual(['US', 'United States']);
+	expect(relevancy.sort(countries, 'Saint Lucia')[0]).toEqual(['LC', 'Saint Lucia']);
+	expect(relevancy.sort(countries, 'CU')[0]).toEqual(['CU', 'Cuba']);
 
 });
 
-test('Countries - single partial', function(){
+module('Countries - single partial', function(){
 	
 	var sorted = relevancy.sort(countries, 'Ukr');
 
-	deepEqual(sorted[0], ['UA', 'Ukraine']);
+	expect(sorted[0]).toEqual(['UA', 'Ukraine']);
 
 });
 
-test('Countries - single partial - second word', function(){
+module('Countries - single partial - second word', function(){
 	
 	var sorted = relevancy.sort(countries, 'Poly');
 
-	deepEqual(sorted[0], ['PF', 'French Polynesia']);
+	expect(sorted[0]).toEqual(['PF', 'French Polynesia']);
 
 });
 
-test('Full sentences', function(){
+module('Full sentences', function(){
 	
 	var unsorted = [
 		'There are only 76 bottles of wine left',
@@ -159,8 +164,7 @@ test('Full sentences', function(){
 		'76 bottles of wine left, and no more...'
 	];
 
-	deepEqual(
-		relevancy.sort(unsorted, 'There are only'),
+	expect(relevancy.sort(unsorted, 'There are only')).toEqual(
 		[
 			unsorted[0],
 			unsorted[1],
@@ -168,8 +172,7 @@ test('Full sentences', function(){
 		]
 	);
 
-	deepEqual(
-		relevancy.sort(unsorted, '76 bottles of'),
+	expect(relevancy.sort(unsorted, '76 bottles of')).toEqual(
 		[
 			unsorted[2],
 			unsorted[0],
@@ -177,8 +180,7 @@ test('Full sentences', function(){
 		]
 	);
 
-	deepEqual(
-		relevancy.sort(unsorted, 'bottles left'),
+	expect(relevancy.sort(unsorted, 'bottles left')).toEqual(
 		[
 			unsorted[1],
 			unsorted[2],
@@ -188,170 +190,172 @@ test('Full sentences', function(){
 
 })
 
-module('subArrayWeightOperations (max, min, avg, custom');
+module('subArrayWeightOperations (max, min, avg, custom', function() {
 
-test('max [default]', function(){
+	module('max [default]', function(){
 
-	// `max` is default
-	
-	var sorted = relevancy.sort([
-		['b', 'c', 'a'],
-		['cccc', 'bbbb', 'cccc'],
-		['bb', 'aa', 'cc']
-	], 'aa');
-
-	deepEqual(
-		sorted,
-		[
-			['bb', 'aa', 'cc'],
+		// `max` is default
+		
+		var sorted = relevancy.sort([
 			['b', 'c', 'a'],
-			['cccc', 'bbbb', 'cccc']
-		]
-	);
+			['cccc', 'bbbb', 'cccc'],
+			['bb', 'aa', 'cc']
+		], 'aa');
 
-});
+		expect(sorted).toEqual(
+			[
+				['bb', 'aa', 'cc'],
+				['b', 'c', 'a'],
+				['cccc', 'bbbb', 'cccc']
+			]
+		);
 
-test('custom - sub arrays', function(){
-	
-	var unsorted = [
-			['a', 'aa', 'aa'],
-			['aa', 'bb', 'bb'], // First item of this sub-array has most relevancy
-			['b', 'aa', 'aa...']
-		],
-		sorted = relevancy.Sorter({
-			subWeightOperation: function(subArray, calc) {
-				// First item only
-				return calc(subArray[0]);
-			}
-		}).sort(unsorted, 'aa');
-
-	deepEqual(
-		sorted,
-		[
-			unsorted[1],
-			unsorted[0],
-			unsorted[2]
-		]
-	);
-
-});
-
-test('custom - sub objects', function(){
-	var unsorted = [
-			{name: 'John'},
-			{name: 'Janet'},
-			{name: 'Linda'},
-			{name: 'Chris'},
-			{name: 'Amber'}
-		],
-		sorted = relevancy.Sorter({
-			subWeightOperation: function(sub, calc) {
-				return calc(sub.name);
-			}
-		}).sort(unsorted, 'an');
-
-	deepEqual(
-		sorted,
-		[
-			unsorted[1],
-			unsorted[4],
-			unsorted[2],
-			unsorted[0],
-			unsorted[3]
-		]
-	);
-
-	// Alternative sig:
-	sorted = relevancy.sort(unsorted, 'an', function(sub, calc) {
-		return calc(sub.name);
 	});
 
-	deepEqual(
-		sorted,
-		[
-			unsorted[1],
-			unsorted[4],
-			unsorted[2],
-			unsorted[0],
-			unsorted[3]
-		]
-	);
-	
+	module('custom - sub arrays', function(){
+		
+		var unsorted = [
+				['a', 'aa', 'aa'],
+				['aa', 'bb', 'bb'], // First item of this sub-array has most relevancy
+				['b', 'aa', 'aa...']
+			],
+			sorted = relevancy.Sorter({
+				subWeightOperation: function(subArray, calc) {
+					// First item only
+					return calc(subArray[0]);
+				}
+			}).sort(unsorted, 'aa');
+
+		expect(sorted).toEqual(
+			[
+				unsorted[1],
+				unsorted[0],
+				unsorted[2]
+			]
+		);
+
+	});
+
+	module('custom - sub objects', function(){
+		var unsorted = [
+				{name: 'John'},
+				{name: 'Janet'},
+				{name: 'Linda'},
+				{name: 'Chris'},
+				{name: 'Amber'}
+			],
+			sorted = relevancy.Sorter({
+				subWeightOperation: function(sub, calc) {
+					return calc(sub.name);
+				}
+			}).sort(unsorted, 'an');
+
+		expect(sorted).toEqual(
+			[
+				unsorted[1],
+				unsorted[4],
+				unsorted[2],
+				unsorted[0],
+				unsorted[3]
+			]
+		);
+
+		// Alternative sig:
+		sorted = relevancy.sort(unsorted, 'an', function(sub, calc) {
+			return calc(sub.name);
+		});
+
+		expect(sorted).toEqual(
+			[
+				unsorted[1],
+				unsorted[4],
+				unsorted[2],
+				unsorted[0],
+				unsorted[3]
+			]
+		);
+		
+	});
+
 });
 
-module('Misc. configs');
+module('Misc. configs', function() {
 
-test('Basic names - Custom secondary comparator (retain index)', function(){
+	module('Basic names - Custom secondary comparator (retain index)', function(){
 
-	// It's possible to specify the secondary comparator used when
-	// weights are found to be equal. relevancy.js will attempt
-	// to retain original positions, but some engines (V8!) don't
-	// have stable sorts... and so this kind of thing can become a necessity.
+		// It's possible to specify the secondary comparator used when
+		// weights are found to be equal. relevancy.js will attempt
+		// to retain original positions, but some engines (V8!) don't
+		// have stable sorts... and so this kind of thing can become a necessity.
 
-	var unsorted = [
-			'John',
-			'Adam',
-			'Julie',
-			'Michael',
-			'Paul',
-			'Sarah',
-			'Joe',
-			'Robert',
-			'James',
-			'Oliver',
-			'Susan',
-			'Ben',
-			'Alice',
-			'Jan',
-			'George'
-		],
-		indexes = {};
+		var unsorted = [
+				'John',
+				'Adam',
+				'Julie',
+				'Michael',
+				'Paul',
+				'Sarah',
+				'Joe',
+				'Robert',
+				'James',
+				'Oliver',
+				'Susan',
+				'Ben',
+				'Alice',
+				'Jan',
+				'George'
+			],
+			indexes = {};
 
-	for (var i = 0, l = unsorted.length; i < l; ++i) {
-		indexes[unsorted[i]] = i;
-	}
+		for (var i = 0, l = unsorted.length; i < l; ++i) {
+			indexes[unsorted[i]] = i;
+		}
 
-	var sorted = relevancy.Sorter({
-			comparator: function(a, b) {
-				return indexes[a] > indexes[b] ? 1 : -1;
-			}
-		}).sort(unsorted.slice(), 'Ja');
+		var sorted = relevancy.Sorter({
+				comparator: function(a, b) {
+					return indexes[a] > indexes[b] ? 1 : -1;
+				}
+			}).sort(unsorted.slice(), 'Ja');
 
-	deepEqual(
-		sorted.slice(0, 5),
-		[
-			'James',
-			'Jan',
+		expect(
+			sorted.slice(0, 5)
+		).toEqual(
+			[
+				'James',
+				'Jan',
 
-			// These three are equal so, thanks to our `indexes`
-			// they should be positioned as in `unsorted`
-			'John',
-			'Julie',
-			'Joe'
-		]
-	);
+				// These three are equal so, thanks to our `indexes`
+				// they should be positioned as in `unsorted`
+				'John',
+				'Julie',
+				'Joe'
+			]
+		);
 
-});
+	});
 
-test('Custom bound - camelCase', function(){
+	module('Custom bound - camelCase', function(){
 
-	var array = [
-		'Script',
-		'blahscript',
-		'JavaScript',
-		'Foo Script'
-	];
-
-	deepEqual(
-		relevancy.Sorter({
-			bounds: ['\\s', '(?=[A-Z])']
-		}).sort(array, 'script'),
-		[
+		var array = [
 			'Script',
-			'Foo Script',
+			'blahscript',
 			'JavaScript',
-			'blahscript'
-		]
-	)
+			'Foo Script'
+		];
+
+		expect(
+			relevancy.Sorter({
+				bounds: ['\\s', '(?=[A-Z])']
+			}).sort(array, 'script')
+		).toEqual(
+			[
+				'Script',
+				'Foo Script',
+				'JavaScript',
+				'blahscript'
+			]
+		)
+
+	});
 
 });
