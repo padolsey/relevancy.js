@@ -139,14 +139,14 @@
     expect: function(v) {
       return new AssertionSet(v);
     },
-    module: function(m, fn) {
-      twtl[_console].group('Module: ' + m);
+    test: function(m, fn) {
+      twtl[_console].group('Test: ' + m);
       var c = twtl.failures;
       fn();
       if (twtl.failures === c) {
         twtl[_console].log('100% Pass');
       }
-      twtl[_console].groupEnd('Module: ' + m);
+      twtl[_console].groupEnd('Test: ' + m);
     },
     failures: 0
   };
@@ -158,7 +158,7 @@
   c.groupEnd = c.groupEnd || String;
 
   global.expect = twtl.expect;
-  global.module = twtl.module;
+  global.test = twtl.test;
   twtl.augment = augment;
 
 // Save the ending line of this very script

@@ -1,6 +1,6 @@
-module('Programmatic', function() {
+test('Programmatic', function() {
 
-	module('Substrings - testing index[0]', function(){
+	test('Substrings - testing index[0]', function(){
 		
 		var unsorted = [],
 			strings = 'foo ggg hhh aaa jjj bar ... mim mam ham jam kam'.split(' ');
@@ -19,9 +19,9 @@ module('Programmatic', function() {
 
 });
 
-module('101', function() {
+test('101', function() {
 
-	module('Basic first-character ordering', function(){
+	test('Basic first-character ordering', function(){
 
 		var unsorted = ['Paul', 'Michael'],
 			sorted = relevancy.sort(unsorted.slice(), 'M');
@@ -30,7 +30,7 @@ module('101', function() {
 
 	});
 
-	module('No matching items', function() {
+	test('No matching items', function() {
 
 		var unsorted = ['aaa', 'bbb', 'ccc'],
 			sorted = relevancy.sort(unsorted.slice(), 'x');
@@ -39,7 +39,7 @@ module('101', function() {
 
 	});
 
-	module('Some matching items', function(){
+	test('Some matching items', function(){
 
 		var unsorted = ['Sarah', 'Julie', 'Michael', 'Paul', 'Amanada'],
 			sorted = relevancy.sort(unsorted.slice(), 'M');
@@ -48,7 +48,7 @@ module('101', function() {
 
 	});
 
-	module('Items containing matches', function(){
+	test('Items containing matches', function(){
 
 		var unsorted = ['AAAA', 'ABBA', 'CCCC', 'CBBC'],
 			sorted = relevancy.sort(unsorted.slice(), 'BB');
@@ -57,7 +57,7 @@ module('101', function() {
 
 	});
 
-	module('Distance-from-start', function(){
+	test('Distance-from-start', function(){
 
 		var unsorted = ['..a', '.a', '....a', 'a', '...a'],
 			sorted = relevancy.sort(unsorted.slice(), 'a');
@@ -68,9 +68,9 @@ module('101', function() {
 
 });
 
-module('Real world examples', function() {
+test('Real world examples', function() {
 
-	module('Basic names - ^Ja', function(){
+	test('Basic names - ^Ja', function(){
 
 		var unsorted = [
 				'John',
@@ -105,7 +105,7 @@ module('Real world examples', function() {
 
 });
 
-module('Full names', function(){
+test('Full names', function(){
 
 	var unsorted = [
 			'John Smith',
@@ -131,7 +131,7 @@ module('Full names', function(){
 
 });
 
-module('Countries - single full', function(){
+test('Countries - single full', function(){
 
 	expect(relevancy.sort(countries, 'GB')[0]).toEqual(['GB', 'United Kingdom']);
 	expect(relevancy.sort(countries, 'United States')[0]).toEqual(['US', 'United States']);
@@ -140,7 +140,7 @@ module('Countries - single full', function(){
 
 });
 
-module('Countries - single partial', function(){
+test('Countries - single partial', function(){
 	
 	var sorted = relevancy.sort(countries, 'Ukr');
 
@@ -148,7 +148,7 @@ module('Countries - single partial', function(){
 
 });
 
-module('Countries - single partial - second word', function(){
+test('Countries - single partial - second word', function(){
 	
 	var sorted = relevancy.sort(countries, 'Poly');
 
@@ -156,7 +156,7 @@ module('Countries - single partial - second word', function(){
 
 });
 
-module('Full sentences', function(){
+test('Full sentences', function(){
 	
 	var unsorted = [
 		'There are only 76 bottles of wine left',
@@ -190,9 +190,9 @@ module('Full sentences', function(){
 
 })
 
-module('subArrayWeightOperations (max, min, avg, custom', function() {
+test('subArrayWeightOperations (max, min, avg, custom', function() {
 
-	module('max [default]', function(){
+	test('max [default]', function(){
 
 		// `max` is default
 		
@@ -212,7 +212,7 @@ module('subArrayWeightOperations (max, min, avg, custom', function() {
 
 	});
 
-	module('custom - sub arrays', function(){
+	test('custom - sub arrays', function(){
 		
 		var unsorted = [
 				['a', 'aa', 'aa'],
@@ -236,7 +236,7 @@ module('subArrayWeightOperations (max, min, avg, custom', function() {
 
 	});
 
-	module('custom - sub objects', function(){
+	test('custom - sub objects', function(){
 		var unsorted = [
 				{name: 'John'},
 				{name: 'Janet'},
@@ -279,9 +279,9 @@ module('subArrayWeightOperations (max, min, avg, custom', function() {
 
 });
 
-module('Misc. configs', function() {
+test('Misc. configs', function() {
 
-	module('Basic names - Custom secondary comparator (retain index)', function(){
+	test('Basic names - Custom secondary comparator (retain index)', function(){
 
 		// It's possible to specify the secondary comparator used when
 		// weights are found to be equal. relevancy.js will attempt
@@ -334,7 +334,7 @@ module('Misc. configs', function() {
 
 	});
 
-	module('Custom bound - camelCase', function(){
+	test('Custom bound - camelCase', function(){
 
 		var array = [
 			'Script',
